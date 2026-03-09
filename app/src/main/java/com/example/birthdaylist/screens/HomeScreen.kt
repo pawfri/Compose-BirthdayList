@@ -98,7 +98,11 @@ fun HomeContent(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Column {
-                        Text(friend.name)
+                        Row {
+                            Text(friend.name)
+                            Spacer(modifier= Modifier.width(8.dp))
+                            Text("25") //TODO: Add actual age logic
+                        }
                         Text(friend.birthday)
                     }
 
