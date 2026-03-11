@@ -1,6 +1,7 @@
 package com.example.birthdaylist.screens
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -85,6 +86,22 @@ fun NewFriendContent(
                     showDatePicker = false
                 }
             )
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            TextButton(onClick = { /* TODO: Cancel logic */ }) {
+                Text("Cancel",
+                    style = MaterialTheme.typography.titleLarge)
+            }
+            TextButton(onClick = { /* TODO: Create logic */ }) {
+                Text("Save",
+                    style = MaterialTheme.typography.titleLarge)
+            }
         }
     }
 }
