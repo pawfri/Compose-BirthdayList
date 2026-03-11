@@ -98,13 +98,16 @@ fun NewFriendContent(
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            TextButton(onClick = { /* TODO: Cancel logic */ }) {
+            OutlinedButton(
+                onClick = { /* TODO: Cancel logic */ },
+                modifier = Modifier.weight(1f)) {
                 Text("Cancel",
                     style = MaterialTheme.typography.titleLarge)
             }
-            TextButton(onClick = { /* TODO: Create logic */ }) {
+            OutlinedButton(onClick = { /* TODO: Create logic */ },
+                modifier = Modifier.weight(1f)) {
                 Text("Save",
                     style = MaterialTheme.typography.titleLarge)
             }
