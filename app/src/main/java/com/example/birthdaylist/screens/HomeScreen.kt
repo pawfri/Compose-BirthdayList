@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -12,11 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
 import com.example.birthdaylist.Friend
 import com.example.birthdaylist.FriendsViewModel
-import com.example.birthdaylist.NavRoutes
+import com.example.birthdaylist.components.AddFriendButton
+import com.example.birthdaylist.components.LogoutButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,29 +45,6 @@ fun HomeScreen(
             navController = navController,
             viewModel = friendsViewModel
         )
-    }
-}
-
-@Composable
-fun LogoutButton(navController: NavController) {
-    Button(
-        onClick = {
-            //TODO: logout logic
-            navController.navigate("login") {
-                popUpTo(0)
-            }
-        }
-    ) {
-        Text("Logout")
-    }
-}
-
-@Composable
-fun AddFriendButton(navController: NavController) {
-    FloatingActionButton(
-        onClick = {navController.navigate("NewFriend")},
-    ) {
-        Icon(Icons.Default.Add, contentDescription = "Add Friend")
     }
 }
 
