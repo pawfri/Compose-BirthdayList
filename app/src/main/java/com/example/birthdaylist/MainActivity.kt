@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.birthdaylist.screens.EditFriendScreen
 import com.example.birthdaylist.screens.HomeScreen
 import com.example.birthdaylist.screens.NewFriendScreen
 import com.example.birthdaylist.ui.theme.BirthdayListTheme
@@ -46,9 +47,9 @@ fun MainScreen() {
         composable(NavRoutes.NewFriend.route) {
             NewFriendScreen(navController)
         }
-//        composable(NavRoutes.EditFriend.route) {
-//            EditFriendScreen(navController)
-//        }
+        composable(NavRoutes.EditFriend.route) {
+            EditFriendScreen(navController)
+        }
     }
 }
 
