@@ -71,9 +71,15 @@ fun NewFriendContent(
             onValueChange = { name = it }
         )
 
-        val birthdayButtonText = birthday?.toString() ?: "Select Birthday"
         OutlinedButton(onClick = { showDatePicker = true }) {
-            Text(birthdayButtonText)
+            Text(
+                text = birthday?.let { millis ->
+                    java.text.SimpleDateFormat(
+                        "dd.MM.yyyy",
+                        java.util.Locale.getDefault())
+                        .format(java.util.Date(millis))
+                } ?: "Select Birthday"
+            )
         }
 
         if (showDatePicker) {
