@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.birthdaylist.components.FriendContent
 import com.example.birthdaylist.components.LogoutButton
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,130 +37,136 @@ fun NewFriendScreen(
             )
         },
     ) { innerPadding ->
-        NewFriendContent(
+        FriendContent(
             innerPadding = innerPadding,
+            title = "New Friend",
+            subtitle = "Enter friend information and click save",
+            initialName = "",
+            initialBirthday = null,
+            onCancel = { navController.popBackStack() },
+            onSave = { name, birthday -> /* TODO logic */ }
         )
     }
 }
 
-@Composable
-fun NewFriendContent(
-    innerPadding: PaddingValues,
-) {
-    var name by remember { mutableStateOf("") }
-    var birthday by remember { mutableStateOf<Long?>(null) }
-    var showDatePicker by remember { mutableStateOf(false) }
-
-    Column(
-        modifier = Modifier
-            .padding(innerPadding)
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        Text(
-            text = "New Friend",
-            style = MaterialTheme.typography.headlineSmall
-        )
-        Text(
-            text = "Enter Friend birthday information",
-            style = MaterialTheme.typography.bodyLarge
-        )
-
-        FriendNameInput(
-            value = name,
-            onValueChange = { name = it }
-        )
-
-        OutlinedButton(onClick = { showDatePicker = true }) {
-            Text(
-                text = birthday?.let { millis ->
-                    java.text.SimpleDateFormat(
-                        "dd.MM.yyyy",
-                        java.util.Locale.getDefault())
-                        .format(java.util.Date(millis))
-                } ?: "Select Birthday"
-            )
-        }
-
-        if (showDatePicker) {
-            DatePickerDialog(
-                onDateSelected = {
-                    birthday = it
-                    showDatePicker = false
-                },
-                onDismiss = {
-                    showDatePicker = false
-                }
-            )
-        }
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            OutlinedButton(
-                onClick = { /* TODO: Cancel logic */ },
-                modifier = Modifier.weight(1f)) {
-                Text("Cancel",
-                    style = MaterialTheme.typography.titleLarge)
-            }
-            OutlinedButton(onClick = { /* TODO: Create logic */ },
-                modifier = Modifier.weight(1f)) {
-                Text("Save",
-                    style = MaterialTheme.typography.titleLarge)
-            }
-        }
-    }
-}
-
-@Composable
-fun FriendNameInput(
-    value: String,
-    onValueChange: (String) -> Unit
-) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = { Text("Name") },
-        modifier = Modifier.fillMaxWidth()
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DatePickerDialog(
-    onDateSelected: (Long?) -> Unit,
-    onDismiss: () -> Unit
-) {
-    val datePickerState = rememberDatePickerState()
-
-    Dialog(onDismissRequest = onDismiss) {
-        Surface(shape = MaterialTheme.shapes.medium) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                DatePicker(state = datePickerState)
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    TextButton(onClick = onDismiss) {
-                        Text("Cancel")
-                    }
-                    TextButton(onClick = {
-                        onDateSelected(datePickerState.selectedDateMillis)
-                    }) {
-                        Text("OK")
-                    }
-                }
-            }
-        }
-    }
-}
+//@Composable
+//fun NewFriendContent(
+//    innerPadding: PaddingValues,
+//) {
+//    var name by remember { mutableStateOf("") }
+//    var birthday by remember { mutableStateOf<Long?>(null) }
+//    var showDatePicker by remember { mutableStateOf(false) }
+//
+//    Column(
+//        modifier = Modifier
+//            .padding(innerPadding)
+//            .fillMaxSize()
+//            .padding(16.dp),
+//        verticalArrangement = Arrangement.spacedBy(16.dp)
+//    ) {
+//        Text(
+//            text = "New Friend",
+//            style = MaterialTheme.typography.headlineSmall
+//        )
+//        Text(
+//            text = "Enter Friend birthday information",
+//            style = MaterialTheme.typography.bodyLarge
+//        )
+//
+//        FriendNameInput(
+//            value = name,
+//            onValueChange = { name = it }
+//        )
+//
+//        OutlinedButton(onClick = { showDatePicker = true }) {
+//            Text(
+//                text = birthday?.let { millis ->
+//                    java.text.SimpleDateFormat(
+//                        "dd.MM.yyyy",
+//                        java.util.Locale.getDefault())
+//                        .format(java.util.Date(millis))
+//                } ?: "Select Birthday"
+//            )
+//        }
+//
+//        if (showDatePicker) {
+//            DatePickerDialog(
+//                onDateSelected = {
+//                    birthday = it
+//                    showDatePicker = false
+//                },
+//                onDismiss = {
+//                    showDatePicker = false
+//                }
+//            )
+//        }
+//
+//        Spacer(modifier = Modifier.weight(1f))
+//
+//        Row(
+//            modifier = Modifier.fillMaxWidth(),
+//            horizontalArrangement = Arrangement.spacedBy(16.dp)
+//        ) {
+//            OutlinedButton(
+//                onClick = { /* TODO: Cancel logic */ },
+//                modifier = Modifier.weight(1f)) {
+//                Text("Cancel",
+//                    style = MaterialTheme.typography.titleLarge)
+//            }
+//            OutlinedButton(onClick = { /* TODO: Create logic */ },
+//                modifier = Modifier.weight(1f)) {
+//                Text("Save",
+//                    style = MaterialTheme.typography.titleLarge)
+//            }
+//        }
+//    }
+//}
+//
+//@Composable
+//fun FriendNameInput(
+//    value: String,
+//    onValueChange: (String) -> Unit
+//) {
+//    OutlinedTextField(
+//        value = value,
+//        onValueChange = onValueChange,
+//        label = { Text("Name") },
+//        modifier = Modifier.fillMaxWidth()
+//    )
+//}
+//
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun DatePickerDialog(
+//    onDateSelected: (Long?) -> Unit,
+//    onDismiss: () -> Unit
+//) {
+//    val datePickerState = rememberDatePickerState()
+//
+//    Dialog(onDismissRequest = onDismiss) {
+//        Surface(shape = MaterialTheme.shapes.medium) {
+//            Column(modifier = Modifier.padding(16.dp)) {
+//                DatePicker(state = datePickerState)
+//
+//                Spacer(modifier = Modifier.height(8.dp))
+//
+//                Row(
+//                    modifier = Modifier.fillMaxWidth(),
+//                    horizontalArrangement = Arrangement.End
+//                ) {
+//                    TextButton(onClick = onDismiss) {
+//                        Text("Cancel")
+//                    }
+//                    TextButton(onClick = {
+//                        onDateSelected(datePickerState.selectedDateMillis)
+//                    }) {
+//                        Text("OK")
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
 
 
 @Preview(showBackground = true)

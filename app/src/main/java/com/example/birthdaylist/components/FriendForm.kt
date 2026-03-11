@@ -1,0 +1,147 @@
+package com.example.birthdaylist.components
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+
+@Composable
+fun FriendContent(
+    innerPadding: PaddingValues,
+    title: String,
+    subtitle: String,
+    initialName: String,
+    initialBirthday: Long?,
+    onCancel: () -> Unit,
+    onSave: (String, Long?) -> Unit
+) {
+    var name by remember { mutableStateOf("") }
+    var birthday by remember { mutableStateOf<Long?>(null) }
+    var showDatePicker by remember { mutableStateOf(false) }
+
+    Column(
+        modifier = Modifier
+            .padding(innerPadding)
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Text(title, style = MaterialTheme.typography.headlineSmall)
+        Text(subtitle, style = MaterialTheme.typography.bodyLarge)
+
+        FriendNameInput(
+            value = name,
+            onValueChange = { name = it }
+        )
+
+        OutlinedButton(onClick = { showDatePicker = true }) {
+            Text(
+                text = birthday?.let { millis ->
+                    java.text.SimpleDateFormat(
+                        "dd.MM.yyyy",
+                        java.util.Locale.getDefault())
+                        .format(java.util.Date(millis))
+                } ?: "Select Birthday"
+            )
+        }
+
+        if (showDatePicker) {
+            DatePickerDialog(
+                onDateSelected = {
+                    birthday = it
+                    showDatePicker = false
+                },
+                onDismiss = {
+                    showDatePicker = false
+                }
+            )
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            OutlinedButton(
+                onClick = { /* TODO: Cancel logic */ },
+                modifier = Modifier.weight(1f)) {
+                Text("Cancel",
+                    style = MaterialTheme.typography.titleLarge)
+            }
+            OutlinedButton(onClick = { /* TODO: Create logic */ },
+                modifier = Modifier.weight(1f)) {
+                Text("Save",
+                    style = MaterialTheme.typography.titleLarge)
+            }
+        }
+    }
+}
+
+@Composable
+fun FriendNameInput(
+    value: String,
+    onValueChange: (String) -> Unit
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text("Name") },
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DatePickerDialog(
+    onDateSelected: (Long?) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val datePickerState = rememberDatePickerState()
+
+    Dialog(onDismissRequest = onDismiss) {
+        Surface(shape = MaterialTheme.shapes.medium) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                DatePicker(state = datePickerState)
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    TextButton(onClick = onDismiss) {
+                        Text("Cancel")
+                    }
+                    TextButton(onClick = {
+                        onDateSelected(datePickerState.selectedDateMillis)
+                    }) {
+                        Text("OK")
+                    }
+                }
+            }
+        }
+    }
+}
