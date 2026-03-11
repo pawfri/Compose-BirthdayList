@@ -8,10 +8,12 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.birthdaylist.Friend
 import com.example.birthdaylist.FriendsViewModel
 import com.example.birthdaylist.components.AddFriendButton
@@ -89,4 +91,12 @@ fun HomeContent(
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HomeScreenPreview() {
+    HomeScreen(
+        navController = rememberNavController()
+    )
 }
