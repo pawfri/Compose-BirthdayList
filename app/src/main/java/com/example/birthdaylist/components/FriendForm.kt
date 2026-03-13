@@ -26,6 +26,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.navigation.NavController
+import com.example.birthdaylist.NavRoutes
 
 @Composable
 fun FriendContent(
@@ -86,7 +88,7 @@ fun FriendContent(
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             OutlinedButton(
-                onClick = { /* TODO: Cancel logic */ },
+                onClick = onCancel,
                 modifier = Modifier.weight(1f)) {
                 Text("Cancel",
                     style = MaterialTheme.typography.titleLarge)

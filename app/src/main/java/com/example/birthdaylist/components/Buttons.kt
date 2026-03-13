@@ -8,6 +8,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
+import com.example.birthdaylist.NavRoutes
 
 @Composable
 fun LogoutButton(navController: NavController) {
@@ -26,7 +27,7 @@ fun LogoutButton(navController: NavController) {
 @Composable
 fun AddFriendButton(navController: NavController) {
     FloatingActionButton(
-        onClick = {navController.navigate("NewFriend")},
+        onClick = { navController.navigate(NavRoutes.NewFriend.route) },
     ) {
         Icon(Icons.Default.Add, contentDescription = "Add Friend")
     }

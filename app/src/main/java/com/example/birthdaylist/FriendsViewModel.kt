@@ -3,7 +3,7 @@ package com.example.birthdaylist
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 
-data class Friend(val name: String, val birthday: String)
+data class Friend(val id: Int, val name: String, val birthday: String)
 
 class FriendsViewModel : ViewModel() {
 
@@ -13,11 +13,15 @@ class FriendsViewModel : ViewModel() {
     init {
         _friends.addAll(
             listOf(
-                Friend("Anna", "12.03.1998"),
-                Friend("Peter", "08.07.1997"),
-                Friend("Maria", "25.11.1999")
+                Friend(1,"Anna", "12.03.1998"),
+                Friend(2, "Peter", "08.07.1997"),
+                Friend(3, "Maria", "25.11.1999")
             )
         )
+    }
+
+    fun getFriendById(id: Int): Friend? {
+        return _friends.find { it.id == id }
     }
 
     fun addFriend(friend: Friend) {

@@ -36,7 +36,7 @@ fun MainScreen() {
 
     NavHost(
         navController = navController,
-        startDestination = NavRoutes.NewFriend.route
+        startDestination = NavRoutes.Home.route
     ) {
 //        composable(NavRoutes.Login.route) {
 //            LoginScreen(navController)
