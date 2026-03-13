@@ -11,7 +11,7 @@ data class Friend(
     @SerialName("name")
     val name: String,
     @SerialName("birthday")
-    val birthday: String,
+    val birthday: String?,
     @SerialName("age")
     val age: Int? = null
 )

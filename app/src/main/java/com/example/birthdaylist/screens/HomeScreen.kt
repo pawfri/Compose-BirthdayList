@@ -7,23 +7,26 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.birthdaylist.Friend
-import com.example.birthdaylist.FriendsViewModel
 import com.example.birthdaylist.components.AddFriendButton
 import com.example.birthdaylist.components.LogoutButton
+import com.example.birthdaylist.viewmodel.FriendsViewModel
+import com.example.birthdaylist.data.Friend
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavHostController,
-    friendsViewModel: FriendsViewModel = viewModel()) {
+    friendsViewModel: FriendsViewModel = koinViewModel()) {
+
+    val uiState = friendsViewModel.friendsUIState.collectAsState()
 
     Scaffold(
         topBar = {
@@ -43,9 +46,9 @@ fun HomeScreen(
     ) { innerPadding ->
         HomeContent(
             innerPadding = innerPadding,
-            friends = friendsViewModel.friends,
+            friends = uiState.value.friends,
             navController = navController,
-            viewModel = friendsViewModel
+            onDelete = { id -> friendsViewModel.deleteFriend(id)}
         )
     }
 }
@@ -55,7 +58,8 @@ fun HomeContent(
     innerPadding: PaddingValues,
     friends: List<Friend>,
     navController: NavController,
-    viewModel: FriendsViewModel
+    onDelete: (Int) -> Unit
+
 ) {
     LazyColumn(
         modifier = Modifier
@@ -79,12 +83,12 @@ fun HomeContent(
                         Row {
                             Text(friend.name)
                             Spacer(modifier= Modifier.width(8.dp))
-                            Text("25") //TODO: Add actual age logic
+                            Text(friend.age?.toString() ?: "-")
                         }
-                        Text(friend.birthday)
+                        Text(friend.birthday ?: "")
                     }
 
-                    IconButton(onClick = { viewModel.deleteFriend(friend) }) {
+                    IconButton(onClick = { onDelete(friend.id) }) {
                         Icon(Icons.Default.Delete, contentDescription = "Delete Friend")
                     }
                 }
