@@ -1,9 +1,9 @@
 package com.example.birthdaylist.dependencyinjection
 
-import com.example.birthdaylist.data.PersonsAPI
-import com.example.birthdaylist.data.PersonsRepository
-import com.example.birthdaylist.data.PersonsRepositoryImpl
-import com.example.birthdaylist.viewmodel.PersonsViewModel
+import com.example.birthdaylist.data.FriendsAPI
+import com.example.birthdaylist.data.FriendsRepository
+import com.example.birthdaylist.data.FriendsRepositoryImpl
+import com.example.birthdaylist.viewmodel.FriendsViewModel
 import kotlinx.coroutines.Dispatchers
 //import kotlinx.serialization.json.Json
 import org.koin.dsl.module
@@ -18,9 +18,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 }*/
 
 val appModules = module {
-    single<PersonsRepository> { PersonsRepositoryImpl(get(), get()) }
+    single<FriendsRepository> { FriendsRepositoryImpl(get(), get()) }
     single { Dispatchers.IO }
-    single { PersonsViewModel(get()) }
+    single { FriendsViewModel(get()) }
     single {
         Retrofit.Builder()
             .addConverterFactory(
@@ -31,5 +31,5 @@ val appModules = module {
             .baseUrl("https://birthdaysrest.azurewebsites.net/api/")
             .build()
     }
-    single { get<Retrofit>().create(PersonsAPI::class.java) }
+    single { get<Retrofit>().create(FriendsAPI::class.java) }
 }

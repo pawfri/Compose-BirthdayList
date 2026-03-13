@@ -3,53 +3,53 @@ package com.example.birthdaylist.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.birthdaylist.data.Person
-import com.example.birthdaylist.data.PersonsRepository
+import com.example.birthdaylist.data.Friend
+import com.example.birthdaylist.data.FriendsRepository
 import com.example.birthdaylist.data.NetworkResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-data class PersonsUIState(
+data class FriendsUIState(
     val isLoading: Boolean = false,
     val error: String? = null,
-    val persons: List<Person> = emptyList()
+    val friends: List<Friend> = emptyList()
 )
 
-data class SinglePersonUIState(
+data class SingleFriendUIState(
     val isLoading: Boolean = false,
     val error: String? = null,
-    val person: Person? = null
+    val friend: Friend? = null
 )
 
-class PersonsViewModel(
-    private val personsRepository: PersonsRepository // dependency injection
+class FriendsViewModel(
+    private val friendsRepository: FriendsRepository // dependency injection
 ) : ViewModel() {
 
-    private val _personsUIState = MutableStateFlow(PersonsUIState())
-    val personsUIState: StateFlow<PersonsUIState> = _personsUIState
+    private val _friendsUIState = MutableStateFlow(FriendsUIState())
+    val friendsUIState: StateFlow<FriendsUIState> = _friendsUIState
 
-    private val _singlePersonUIState = MutableStateFlow(SinglePersonUIState())
+    private val _singleFriendUIState = MutableStateFlow(SingleFriendUIState())
 
-    private var originalPersonList: List<Person> = emptyList()
+    private var originalFriendList: List<Friend> = emptyList()
 
     init {
-        getPersons()
+        getFriends()
     }
 
-    fun getPersons() {
-        _personsUIState.update { it.copy(isLoading = true, error = null) }
+    fun getFriends() {
+        _friendsUIState.update { it.copy(isLoading = true, error = null) }
         viewModelScope.launch {
-            when (val result = personsRepository.getPersons()) {
+            when (val result = friendsRepository.getFriends()) {
                 is NetworkResult.Success -> {
-                    originalPersonList = result.data
-                    _personsUIState.update { ui ->
-                        ui.copy(isLoading = false, persons = result.data)
+                    originalFriendList = result.data
+                    _friendsUIState.update { ui ->
+                        ui.copy(isLoading = false, friends = result.data)
                     }
                 }
                 is NetworkResult.Error -> {
-                    _personsUIState.update { ui ->
+                    _friendsUIState.update { ui ->
                         ui.copy(isLoading = false, error = result.error)
                     }
                 }
@@ -57,46 +57,46 @@ class PersonsViewModel(
         }
     }
 
-    fun addPerson(person: Person) {
-        _singlePersonUIState.update { it.copy(isLoading = true, error = null) }
+    fun addFriend(friend: Friend) {
+        _singleFriendUIState.update { it.copy(isLoading = true, error = null) }
         viewModelScope.launch {
-            when (val result = personsRepository.addPerson(person)) {
+            when (val result = friendsRepository.addFriend(friend)) {
                 is NetworkResult.Success -> {
-                    _singlePersonUIState.update { it.copy(isLoading = false, person = result.data) }
-                    getPersons() // refresh list after mutation
+                    _singleFriendUIState.update { it.copy(isLoading = false, friend = result.data) }
+                    getFriends() // refresh list after mutation
                 }
                 is NetworkResult.Error -> {
-                    _singlePersonUIState.update { it.copy(isLoading = false, error = result.error) }
+                    _singleFriendUIState.update { it.copy(isLoading = false, error = result.error) }
                 }
             }
         }
     }
 
-    fun deletePerson(personId: Int) {
-        _singlePersonUIState.update { it.copy(isLoading = true, error = null) }
+    fun deleteFriend(id: Int) {
+        _singleFriendUIState.update { it.copy(isLoading = true, error = null) }
         viewModelScope.launch {
-            when (val result = personsRepository.deletePerson(personId)) {
+            when (val result = friendsRepository.deleteFriend(id)) {
                 is NetworkResult.Success -> {
-                    _singlePersonUIState.update { it.copy(isLoading = false, person = result.data) }
-                    getPersons()
+                    _singleFriendUIState.update { it.copy(isLoading = false, friend = result.data) }
+                    getFriends()
                 }
                 is NetworkResult.Error -> {
-                    _singlePersonUIState.update { it.copy(isLoading = false, error = result.error) }
+                    _singleFriendUIState.update { it.copy(isLoading = false, error = result.error) }
                 }
             }
         }
     }
 
-    fun updatePerson(personId: Int, person: Person) {
-        _singlePersonUIState.update { it.copy(isLoading = true, error = null) }
+    fun updateFriend(id: Int, friend: Friend) {
+        _singleFriendUIState.update { it.copy(isLoading = true, error = null) }
         viewModelScope.launch {
-            when (val result = personsRepository.updatePerson(personId, person)) {
+            when (val result = friendsRepository.updateFriend(id, friend)) {
                 is NetworkResult.Success -> {
-                    _singlePersonUIState.update { it.copy(isLoading = false, person = result.data) }
-                    getPersons()
+                    _singleFriendUIState.update { it.copy(isLoading = false, friend = result.data) }
+                    getFriends()
                 }
                 is NetworkResult.Error -> {
-                    _singlePersonUIState.update { it.copy(isLoading = false, error = result.error) }
+                    _singleFriendUIState.update { it.copy(isLoading = false, error = result.error) }
                 }
             }
         }
@@ -105,11 +105,11 @@ class PersonsViewModel(
     /** Filtering: name contains */
     fun filterByName(nameFragment: String) {
         if (nameFragment.isBlank()) {
-            _personsUIState.update { it.copy(persons = originalPersonList) }
+            _friendsUIState.update { it.copy(friends = originalFriendList) }
         } else {
-            _personsUIState.update { ui ->
+            _friendsUIState.update { ui ->
                 ui.copy(
-                    persons = ui.persons.filter { p ->
+                    friends = ui.friends.filter { p ->
                         p.name.contains(nameFragment, ignoreCase = true)
                     }
                 )
@@ -119,24 +119,24 @@ class PersonsViewModel(
 
     /** Sorting: name */
     fun sortByName(ascending: Boolean) {
-        _personsUIState.update { ui ->
+        _friendsUIState.update { ui ->
             ui.copy(
-                persons = if (ascending)
-                    ui.persons.sortedBy { it.name }
+                friends = if (ascending)
+                    ui.friends.sortedBy { it.name }
                 else
-                    ui.persons.sortedByDescending { it.name }
+                    ui.friends.sortedByDescending { it.name }
             )
         }
     }
 
     /** Sorting: age */
     fun sortByAge(ascending: Boolean) {
-        _personsUIState.update { ui ->
+        _friendsUIState.update { ui ->
             ui.copy(
-                persons = if (ascending)
-                    ui.persons.sortedWith(compareBy(nullsLast()) { it.age })
+                friends = if (ascending)
+                    ui.friends.sortedWith(compareBy(nullsLast()) { it.age })
                 else
-                    ui.persons.sortedWith(compareBy(nullsLast<Int>()) { it.age }).reversed()
+                    ui.friends.sortedWith(compareBy(nullsLast<Int>()) { it.age }).reversed()
             )
         }
     }

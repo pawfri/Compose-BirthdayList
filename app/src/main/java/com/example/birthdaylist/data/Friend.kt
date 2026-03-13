@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Person(
+data class Friend(
     @SerialName("id")
     // TODO this is kotlinx annotation
     val id: Int = -1,

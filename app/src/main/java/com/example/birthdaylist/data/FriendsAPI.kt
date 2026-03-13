@@ -8,16 +8,16 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
-interface PersonsAPI {
+interface FriendsAPI {
     @GET("persons")
-    suspend fun getPersons(): Response<List<Person>>
+    suspend fun getFriends(): Response<List<Friend>>
 
     @POST("persons")
-    suspend fun addPerson(@Body book: Person): Response<Person>
+    suspend fun addFriend(@Body book: Friend): Response<Friend>
 
     @DELETE("persons/{id}")
-    suspend fun deletePerson(@Path("id") id: Int): Response<Person>
+    suspend fun deleteFriend(@Path("id") id: Int): Response<Friend>
 
     @PUT("persons/{id}")
-    suspend fun updatePerson(@Path("id") id: Int, @Body person: Person): Response<Person>
+    suspend fun updateFriend(@Path("id") id: Int, @Body friend: Friend): Response<Friend>
 }

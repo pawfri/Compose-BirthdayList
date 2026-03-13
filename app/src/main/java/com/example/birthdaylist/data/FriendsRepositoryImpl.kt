@@ -4,14 +4,14 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
-class PersonsRepositoryImpl(
-    private val personsAPI: PersonsAPI,
+class FriendsRepositoryImpl(
+    private val friendsAPI: FriendsAPI,
     private val dispatcher: CoroutineDispatcher
-) : PersonsRepository {
-    override suspend fun getPersons(): NetworkResult<List<Person>> {
+) : FriendsRepository {
+    override suspend fun getFriends(): NetworkResult<List<Friend>> {
         return withContext(dispatcher) {
             try {
-                val response = personsAPI.getPersons()
+                val response = friendsAPI.getFriends()
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body != null) {
@@ -30,10 +30,10 @@ class PersonsRepositoryImpl(
         }
     }
 
-    override suspend fun addPerson(person: Person): NetworkResult<Person> {
+    override suspend fun addFriend(friend: Friend): NetworkResult<Friend> {
         return withContext(dispatcher) {
             try {
-                val response = personsAPI.addPerson(person)
+                val response = friendsAPI.addFriend(friend)
                 if (response.isSuccessful)
                     if (response.body() != null)
                         NetworkResult.Success(response.body()!!)
@@ -49,10 +49,10 @@ class PersonsRepositoryImpl(
         }
     }
 
-    override suspend fun deletePerson(id: Int): NetworkResult<Person> {
+    override suspend fun deleteFriend(id: Int): NetworkResult<Friend> {
         return withContext(dispatcher) {
             try {
-                val response = personsAPI.deletePerson(id)
+                val response = friendsAPI.deleteFriend(id)
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body != null)
@@ -70,10 +70,10 @@ class PersonsRepositoryImpl(
     }
 
 
-    override suspend fun updatePerson(id: Int, data: Person): NetworkResult<Person> {
+    override suspend fun updateFriend(id: Int, data: Friend): NetworkResult<Friend> {
         return withContext(dispatcher) {
             try {
-                val response = personsAPI.updatePerson(id, data)
+                val response = friendsAPI.updateFriend(id, data)
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body != null) {
