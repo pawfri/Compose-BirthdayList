@@ -27,9 +27,7 @@ fun NewFriendScreen(
         topBar = {
             TopAppBar(
                 title = { Text("Add New Friend") },
-                actions = {
-                    LogoutButton(navController)
-                },
+                actions = { LogoutButton(navController) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary,
