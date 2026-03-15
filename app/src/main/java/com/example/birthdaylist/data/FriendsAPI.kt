@@ -9,15 +9,15 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface FriendsAPI {
-    @GET("persons")
+    @GET("Persons")
     suspend fun getFriends(): Response<List<Friend>>
 
-    @POST("persons")
+    @POST("Persons")
     suspend fun addFriend(@Body friend: Friend): Response<Friend>
 
-    @DELETE("persons/{id}")
+    @DELETE("Persons/{id}")
     suspend fun deleteFriend(@Path("id") id: Int): Response<Friend>
 
-    @PUT("persons/{id}")
+    @PUT("Persons/{id}")
     suspend fun updateFriend(@Path("id") id: Int, @Body friend: Friend): Response<Friend>
 }
