@@ -40,8 +40,8 @@ fun FriendContent(
     onCancel: () -> Unit,
     onSave: (String, Long?) -> Unit
 ) {
-    var name by rememberSaveable { mutableStateOf("") }
-    var birthday by rememberSaveable { mutableStateOf<Long?>(null) }
+    var name by rememberSaveable(initialName) { mutableStateOf(initialName) }
+    var birthday by rememberSaveable(initialBirthday) {  mutableStateOf<Long?>(initialBirthday) }
     var showDatePicker by remember { mutableStateOf(false) }
 
     val isValid = name.isNotBlank()
@@ -128,7 +128,7 @@ fun DatePickerDialog(
     onDateSelected: (Long?) -> Unit,
     onDismiss: () -> Unit
 ) {
-    val datePickerState = rememberDatePickerState()
+    val datePickerState = rememberDatePickerState(initialSelectedDateMillis = initialSelectedMillis)
 
     Dialog(onDismissRequest = onDismiss) {
         Surface(shape = MaterialTheme.shapes.medium) {

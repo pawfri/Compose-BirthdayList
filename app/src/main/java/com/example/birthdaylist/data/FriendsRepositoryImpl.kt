@@ -34,12 +34,13 @@ class FriendsRepositoryImpl(
         return withContext(dispatcher) {
             try {
                 val response = friendsAPI.addFriend(friend)
-                if (response.isSuccessful)
-                    if (response.body() != null)
-                        NetworkResult.Success(response.body()!!)
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    if (body != null)
+                        NetworkResult.Success(body)
                     else
                         NetworkResult.Error("Response body is null")
-                else
+                } else
                     NetworkResult.Error(response.message())
             } catch (e: CancellationException) {
                 throw e
@@ -81,7 +82,6 @@ class FriendsRepositoryImpl(
                     } else {
                         NetworkResult.Error("Response body is null")
                     }
-                    NetworkResult.Success(response.body()!!)
                 } else
                     NetworkResult.Error(response.message())
             } catch (e: CancellationException) {

@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.birthdaylist.NavRoutes
 import com.example.birthdaylist.components.AddFriendButton
 import com.example.birthdaylist.components.LogoutButton
 import com.example.birthdaylist.viewmodel.FriendsViewModel
@@ -71,7 +72,7 @@ fun HomeContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
-                onClick = { navController.navigate("EditFriend") }
+                onClick = { navController.navigate("${NavRoutes.EditFriend.route}/${friend.id}") }
             ) {
                 Row(
                     modifier = Modifier
