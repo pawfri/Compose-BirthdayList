@@ -13,7 +13,7 @@ interface FriendsAPI {
     suspend fun getFriends(): Response<List<Friend>>
 
     @POST("persons")
-    suspend fun addFriend(@Body book: Friend): Response<Friend>
+    suspend fun addFriend(@Body friend: Friend): Response<Friend>
 
     @DELETE("persons/{id}")
     suspend fun deleteFriend(@Path("id") id: Int): Response<Friend>
