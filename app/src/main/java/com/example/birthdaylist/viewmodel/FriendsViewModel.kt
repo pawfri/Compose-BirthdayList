@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.Calendar
+import java.util.TimeZone
 
 data class FriendsUIState(
     val isLoading: Boolean = false,
@@ -65,11 +67,11 @@ class FriendsViewModel(
         var birthDay: Int? = null
 
         if (birthdayMillis != null) {
-            val convert = java.util.Calendar.getInstance()
+            val convert = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
             convert.timeInMillis = birthdayMillis
-            birthYear = convert.get(java.util.Calendar.YEAR)
-            birthMonth = convert.get(java.util.Calendar.MONTH) + 1
-            birthDay = convert.get(java.util.Calendar.DAY_OF_MONTH)
+            birthYear = convert.get(Calendar.YEAR)
+            birthMonth = convert.get(Calendar.MONTH) + 1
+            birthDay = convert.get(Calendar.DAY_OF_MONTH)
         }
 
         val friend = Friend(

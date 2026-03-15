@@ -1,25 +1,18 @@
 package com.example.birthdaylist.screens
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.birthdaylist.components.FriendContent
 import com.example.birthdaylist.components.LogoutButton
 import com.example.birthdaylist.viewmodel.FriendsViewModel
 import org.koin.androidx.compose.koinViewModel
 import java.util.Calendar
+import java.util.TimeZone
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,7 +25,7 @@ fun EditFriendScreen(
     val friend = ui.friends.firstOrNull { it.id == friendId } ?: return
 
     val initialMillis = remember(friend) {
-        Calendar.getInstance().apply {
+        Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
             set(Calendar.YEAR, friend.birthYear ?: 2000)
             set(Calendar.MONTH, (friend.birthMonth ?: 1) - 1)
             set(Calendar.DAY_OF_MONTH, friend.birthDayOfMonth ?: 1)
@@ -62,7 +55,7 @@ fun EditFriendScreen(
             onCancel = { navController.popBackStack() },
             onSave = { newName, millis ->
                 millis?.let {
-                    val c = Calendar.getInstance().apply { timeInMillis = it }
+                    val c = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply { timeInMillis = it }
                     val updated = friend.copy(
                         name = newName.trim(),
                         birthYear = c.get(Calendar.YEAR),
@@ -77,11 +70,3 @@ fun EditFriendScreen(
         )
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun EditFriendScreenPreview() {
-//    EditFriendScreen(
-//        navController = rememberNavController()
-//    )
-//}
