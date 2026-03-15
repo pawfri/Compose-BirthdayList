@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -39,9 +40,11 @@ fun FriendContent(
     onCancel: () -> Unit,
     onSave: (String, Long?) -> Unit
 ) {
-    var name by remember { mutableStateOf("") }
-    var birthday by remember { mutableStateOf<Long?>(null) }
+    var name by rememberSaveable { mutableStateOf("") }
+    var birthday by rememberSaveable { mutableStateOf<Long?>(null) }
     var showDatePicker by remember { mutableStateOf(false) }
+
+    val isValid = name.isNotBlank()
 
     Column(
         modifier = Modifier
@@ -71,6 +74,7 @@ fun FriendContent(
 
         if (showDatePicker) {
             DatePickerDialog(
+                initialSelectedMillis = birthday,
                 onDateSelected = {
                     birthday = it
                     showDatePicker = false
@@ -93,7 +97,9 @@ fun FriendContent(
                 Text("Cancel",
                     style = MaterialTheme.typography.titleLarge)
             }
-            OutlinedButton(onClick = { /* TODO: Create logic */ },
+            OutlinedButton(
+                onClick = { onSave(name.trim(), birthday) },
+                enabled = isValid,
                 modifier = Modifier.weight(1f)) {
                 Text("Save",
                     style = MaterialTheme.typography.titleLarge)
@@ -118,6 +124,7 @@ fun FriendNameInput(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerDialog(
+    initialSelectedMillis: Long? = null,
     onDateSelected: (Long?) -> Unit,
     onDismiss: () -> Unit
 ) {
