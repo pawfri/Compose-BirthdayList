@@ -16,11 +16,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.birthdaylist.components.FriendContent
 import com.example.birthdaylist.components.LogoutButton
+import com.example.birthdaylist.viewmodel.FriendsViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewFriendScreen(
     navController: NavHostController,
+    friendsViewModel: FriendsViewModel = koinViewModel()
 ) {
 
     Scaffold(
@@ -42,7 +45,10 @@ fun NewFriendScreen(
             initialName = "",
             initialBirthday = null,
             onCancel = { navController.popBackStack() },
-            onSave = { name, birthday -> /* TODO logic */ }
+            onSave = { name, birthdayMillis ->
+                friendsViewModel.addFriend(name, birthdayMillis)
+                navController.popBackStack()
+            }
         )
     }
 }

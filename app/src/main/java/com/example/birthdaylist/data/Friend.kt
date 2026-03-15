@@ -4,14 +4,15 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+
 data class Friend(
-    @SerialName("id")
-    // TODO this is kotlinx annotation
     val id: Int = -1,
-    @SerialName("name")
+    val userId: String? = null,
     val name: String,
-    @SerialName("birthday")
-    val birthday: String?,
-    @SerialName("age")
+    val birthYear: Int? = null,
+    val birthMonth: Int? = null,
+    val birthDayOfMonth: Int? = null,
+    val remarks: String? = null,
+    val pictureUrl: String? = null,
     val age: Int? = null
 )

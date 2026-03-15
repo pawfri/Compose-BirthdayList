@@ -57,13 +57,37 @@ class FriendsViewModel(
         }
     }
 
-    fun addFriend(friend: Friend) {
+    fun addFriend(name: String, birthdayMillis: Long?) {
         _singleFriendUIState.update { it.copy(isLoading = true, error = null) }
+
+        var birthYear: Int? = null
+        var birthMonth: Int? = null
+        var birthDay: Int? = null
+
+        if (birthdayMillis != null) {
+            val convert = java.util.Calendar.getInstance()
+            convert.timeInMillis = birthdayMillis
+            birthYear = convert.get(java.util.Calendar.YEAR)
+            birthMonth = convert.get(java.util.Calendar.MONTH) + 1
+            birthDay = convert.get(java.util.Calendar.DAY_OF_MONTH)
+        }
+
+        val friend = Friend(
+            id = -1,
+            userId = "Test@test.dk", //TODO: Create user logic instead of hardcoded
+            name = name.trim(),
+            birthYear = birthYear,
+            birthMonth = birthMonth,
+            birthDayOfMonth = birthDay,
+            remarks = null,
+            age = null,
+        )
+
         viewModelScope.launch {
             when (val result = friendsRepository.addFriend(friend)) {
                 is NetworkResult.Success -> {
                     _singleFriendUIState.update { it.copy(isLoading = false, friend = result.data) }
-                    getFriends() // refresh list after mutation
+                    getFriends()
                 }
                 is NetworkResult.Error -> {
                     _singleFriendUIState.update { it.copy(isLoading = false, error = result.error) }

@@ -85,7 +85,7 @@ fun HomeContent(
                             Spacer(modifier= Modifier.width(8.dp))
                             Text(friend.age?.toString() ?: "-")
                         }
-                        Text(friend.birthday ?: "")
+                        Text("${friend.birthDayOfMonth}-${friend.birthMonth}-${friend.birthYear}")
                     }
 
                     IconButton(onClick = { onDelete(friend.id) }) {
