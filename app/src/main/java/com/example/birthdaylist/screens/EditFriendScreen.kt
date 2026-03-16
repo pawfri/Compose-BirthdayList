@@ -3,26 +3,28 @@ package com.example.birthdaylist.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.navigation.NavHostController
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.birthdaylist.components.FriendContent
-import com.example.birthdaylist.components.LogoutButton
-import com.example.birthdaylist.viewmodel.FriendsViewModel
-import org.koin.androidx.compose.koinViewModel
+import com.example.birthdaylist.data.Friend
 import java.util.Calendar
 import java.util.TimeZone
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditFriendScreen(
-    navController: NavHostController,
-    friendId: Int,
-    viewModel: FriendsViewModel = koinViewModel()
+    friend: Friend?,
+    onUpdate: (Friend) -> Unit,
+    onNavigateBack: () -> Unit,
+    onLogout: () -> Unit
 ) {
-    val ui by viewModel.friendsUIState.collectAsState()
-    val friend = ui.friends.firstOrNull { it.id == friendId } ?: return
+    if (friend == null) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            Text("Friend not found")
+        }
+        return
+    }
 
     val initialMillis = remember(friend) {
         Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
@@ -38,7 +40,11 @@ fun EditFriendScreen(
         topBar = {
             TopAppBar(
                 title = { Text("Edit Friend") },
-                actions = { LogoutButton(navController) },
+                actions = { 
+                    Button(onClick = onLogout) {
+                        Text("Logout")
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary,
@@ -52,7 +58,7 @@ fun EditFriendScreen(
             subtitle = "Update friend information and click save",
             initialName = friend.name,
             initialBirthday = initialMillis,
-            onCancel = { navController.popBackStack() },
+            onCancel = onNavigateBack,
             onSave = { newName, millis ->
                 millis?.let {
                     val c = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply { timeInMillis = it }
@@ -63,10 +69,20 @@ fun EditFriendScreen(
                         birthDayOfMonth = c.get(Calendar.DAY_OF_MONTH),
                         userId = "Test@test.dk" // TODO: remove when login is added
                     )
-                    viewModel.updateFriend(friendId, updated)
+                    onUpdate(updated)
                 }
-                navController.popBackStack()
             }
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun EditFriendScreenPreview() {
+    EditFriendScreen(
+        friend = Friend(id = 1, name = "Anna", birthYear = 1998, birthMonth = 3, birthDayOfMonth = 12, age = 25),
+        onUpdate = {},
+        onNavigateBack = {},
+        onLogout = {}
+    )
 }

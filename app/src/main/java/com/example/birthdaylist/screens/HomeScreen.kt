@@ -4,36 +4,34 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.example.birthdaylist.NavRoutes
-import com.example.birthdaylist.components.AddFriendButton
-import com.example.birthdaylist.components.LogoutButton
-import com.example.birthdaylist.viewmodel.FriendsViewModel
 import com.example.birthdaylist.data.Friend
-import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    navController: NavHostController,
-    friendsViewModel: FriendsViewModel = koinViewModel()) {
-
-    val uiState = friendsViewModel.friendsUIState.collectAsState()
-
+    friends: List<Friend>,
+    modifier: Modifier = Modifier,
+    onAdd: () -> Unit,
+    onEdit: (Int) -> Unit,
+    onDelete: (Int) -> Unit,
+    onLogout: () -> Unit
+) {
     Scaffold(
+        modifier = modifier,
         topBar = {
             TopAppBar(
                 title = { Text("Home") },
-                actions = {LogoutButton(navController)
+                actions = {
+                    Button(onClick = onLogout) {
+                        Text("Logout")
+                    }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -42,14 +40,16 @@ fun HomeScreen(
             )
         },
         floatingActionButton = {
-            AddFriendButton(navController)
+            FloatingActionButton(onClick = onAdd) {
+                Icon(Icons.Default.Add, contentDescription = "Add Friend")
+            }
         },
     ) { innerPadding ->
         HomeContent(
             innerPadding = innerPadding,
-            friends = uiState.value.friends,
-            navController = navController,
-            onDelete = { id -> friendsViewModel.deleteFriend(id)}
+            friends = friends,
+            onEdit = onEdit,
+            onDelete = onDelete
         )
     }
 }
@@ -58,9 +58,8 @@ fun HomeScreen(
 fun HomeContent(
     innerPadding: PaddingValues,
     friends: List<Friend>,
-    navController: NavController,
+    onEdit: (Int) -> Unit,
     onDelete: (Int) -> Unit
-
 ) {
     LazyColumn(
         modifier = Modifier
@@ -72,7 +71,7 @@ fun HomeContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
-                onClick = { navController.navigate("${NavRoutes.EditFriend.route}/${friend.id}") }
+                onClick = { onEdit(friend.id) }
             ) {
                 Row(
                     modifier = Modifier
@@ -83,7 +82,7 @@ fun HomeContent(
                     Column {
                         Row {
                             Text(friend.name)
-                            Spacer(modifier= Modifier.width(8.dp))
+                            Spacer(modifier = Modifier.width(8.dp))
                             Text(friend.age?.toString() ?: "-")
                         }
                         Text("${friend.birthDayOfMonth}-${friend.birthMonth}-${friend.birthYear}")
@@ -102,6 +101,12 @@ fun HomeContent(
 @Composable
 fun HomeScreenPreview() {
     HomeScreen(
-        navController = rememberNavController()
+        friends = listOf(
+            Friend(id = 1, name = "Anna", birthYear = 1998, birthMonth = 3, birthDayOfMonth = 12, age = 25)
+        ),
+        onAdd = {},
+        onEdit = {},
+        onDelete = {},
+        onLogout = {}
     )
 }

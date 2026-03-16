@@ -5,7 +5,6 @@ import com.example.birthdaylist.data.FriendsRepository
 import com.example.birthdaylist.data.FriendsRepositoryImpl
 import com.example.birthdaylist.viewmodel.FriendsViewModel
 import kotlinx.coroutines.Dispatchers
-import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -13,8 +12,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 val appModules = module {
     single<FriendsRepository> { FriendsRepositoryImpl(get(), get()) }
     single { Dispatchers.IO }
-    
-    viewModel { FriendsViewModel(get()) }
+
+    single { FriendsViewModel(get()) }
 
     single {
         Retrofit.Builder()
