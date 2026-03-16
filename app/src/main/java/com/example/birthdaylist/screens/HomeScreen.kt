@@ -80,12 +80,18 @@ fun HomeContent(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Column {
-                        Row {
-                            Text(friend.name)
-                            Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = friend.name,
+                            style = MaterialTheme.typography.titleMedium
+                        )
+
+                        Row{
                             Text(friend.age?.toString() ?: "-")
+                            Text(
+                                if (friend.age == 1) " year" else " years"
+                            )
                         }
-                        Text("${friend.birthDayOfMonth}-${friend.birthMonth}-${friend.birthYear}")
+                        Text("${friend.birthDayOfMonth}/${friend.birthMonth}/${friend.birthYear}")
                     }
 
                     IconButton(onClick = { onDelete(friend.id) }) {
