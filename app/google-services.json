@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "855681019086",
+    "project_id": "compose-friis",
+    "storage_bucket": "compose-friis.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:855681019086:android:b30ba5bfb78454c09a749f",
+        "android_client_info": {
+          "package_name": "com.example.birthdaylist"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4NwEJEedXHZih0r78Tq1UUgn-qcWugBg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

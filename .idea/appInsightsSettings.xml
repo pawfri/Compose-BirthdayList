@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.example.birthdaylist" />
+                  <option name="mobileSdkAppId" value="1:855681019086:android:b30ba5bfb78454c09a749f" />
+                  <option name="projectId" value="compose-friis" />
+                  <option name="projectNumber" value="855681019086" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
