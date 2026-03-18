@@ -63,8 +63,7 @@ fun EditFriendScreen(
                         name = newName.trim(),
                         birthYear = c.get(Calendar.YEAR),
                         birthMonth = c.get(Calendar.MONTH) + 1,
-                        birthDayOfMonth = c.get(Calendar.DAY_OF_MONTH),
-                        userId = "Test@test.dk" // TODO: remove when login is added
+                        birthDayOfMonth = c.get(Calendar.DAY_OF_MONTH)
                     )
                     onUpdate(updated)
                 }

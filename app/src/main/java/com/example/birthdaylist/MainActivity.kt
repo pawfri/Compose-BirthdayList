@@ -45,6 +45,7 @@ fun MainScreen(
 ) {
     val friendsViewModel: FriendsViewModel = koinViewModel()
     val friendsUIState by friendsViewModel.friendsUIState.collectAsStateWithLifecycle()
+    val currentUserEmail = authenticationViewModel.user?.email ?: ""
 
     NavHost(
         navController = navController,
@@ -56,7 +57,7 @@ fun MainScreen(
                 modifier = modifier,
                 onAdd = { navController.navigate(NavRoutes.NewFriend.route) },
                 onEdit = { id: Int -> navController.navigate("${NavRoutes.EditFriend.route}/$id") },
-                onDelete = { id: Int -> friendsViewModel.deleteFriend(id) },
+                onDelete = { id: Int -> friendsViewModel.deleteFriend(id, currentUserEmail) },
                 onLogout = { authenticationViewModel.signOut() },
                 navigateToLogin = {
                     navController.popBackStack(NavRoutes.Login.route, inclusive = false)
@@ -70,7 +71,10 @@ fun MainScreen(
                 signIn = { email, password -> authenticationViewModel.signIn(email, password) },
                 register = { email, password -> authenticationViewModel.register(email, password) },
                 navigateToNextScreen = {
-                    navController.navigate(NavRoutes.Home.route)
+                    friendsViewModel.getFriends(currentUserEmail)
+                    navController.navigate(NavRoutes.Home.route) {
+                        popUpTo(NavRoutes.Login.route) { inclusive = true }
+                    }
                 }
             )
         }
@@ -97,7 +101,7 @@ fun MainScreen(
             NewFriendScreen(
                 onNavigateBack = { navController.popBackStack() },
                 onAdd = { name: String, birthdayMillis: Long? ->
-                    friendsViewModel.addFriend(name, birthdayMillis)
+                    friendsViewModel.addFriend(currentUserEmail, name, birthdayMillis)
                     navController.popBackStack()
                 },
                 onLogout = { authenticationViewModel.signOut() },

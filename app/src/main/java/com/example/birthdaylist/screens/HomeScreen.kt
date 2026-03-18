@@ -23,7 +23,7 @@ fun HomeScreen(
     onEdit: (Int) -> Unit,
     onDelete: (Int) -> Unit,
     onLogout: () -> Unit,
-    navigateToLogin: () -> Unit
+    navigateToLogin: () -> Unit,
 ) {
     Scaffold(
         modifier = modifier,

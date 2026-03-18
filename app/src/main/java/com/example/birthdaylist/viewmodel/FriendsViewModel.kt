@@ -36,18 +36,15 @@ class FriendsViewModel(
 
     private var originalFriendList: List<Friend> = emptyList()
 
-    init {
-        getFriends()
-    }
-
-    fun getFriends() {
+    fun getFriends(userId: String) {
         _friendsUIState.update { it.copy(isLoading = true, error = null) }
         viewModelScope.launch {
             when (val result = friendsRepository.getFriends()) {
                 is NetworkResult.Success -> {
-                    originalFriendList = result.data
+                    val filteredFriends = result.data.filter { it.userId == userId }
+                    originalFriendList = filteredFriends
                     _friendsUIState.update { ui ->
-                        ui.copy(isLoading = false, friends = result.data)
+                        ui.copy(isLoading = false, friends = filteredFriends)
                     }
                 }
                 is NetworkResult.Error -> {
@@ -59,7 +56,7 @@ class FriendsViewModel(
         }
     }
 
-    fun addFriend(name: String, birthdayMillis: Long?) {
+    fun addFriend(userId: String, name: String, birthdayMillis: Long?) {
         _singleFriendUIState.update { it.copy(isLoading = true, error = null) }
 
         var birthYear: Int? = null
@@ -76,7 +73,7 @@ class FriendsViewModel(
 
         val friend = Friend(
             id = -1,
-            userId = "Test@test.dk", //TODO: Create user logic instead of hardcoded
+            userId = userId,
             name = name.trim(),
             birthYear = birthYear,
             birthMonth = birthMonth,
@@ -89,7 +86,7 @@ class FriendsViewModel(
             when (val result = friendsRepository.addFriend(friend)) {
                 is NetworkResult.Success -> {
                     _singleFriendUIState.update { it.copy(isLoading = false, friend = result.data) }
-                    getFriends()
+                    getFriends(userId)
                 }
                 is NetworkResult.Error -> {
                     _singleFriendUIState.update { it.copy(isLoading = false, error = result.error) }
@@ -98,13 +95,13 @@ class FriendsViewModel(
         }
     }
 
-    fun deleteFriend(id: Int) {
+    fun deleteFriend(id: Int, userId: String) {
         _singleFriendUIState.update { it.copy(isLoading = true, error = null) }
         viewModelScope.launch {
             when (val result = friendsRepository.deleteFriend(id)) {
                 is NetworkResult.Success -> {
                     _singleFriendUIState.update { it.copy(isLoading = false, friend = result.data) }
-                    getFriends()
+                    getFriends(userId)
                 }
                 is NetworkResult.Error -> {
                     _singleFriendUIState.update { it.copy(isLoading = false, error = result.error) }
@@ -119,7 +116,7 @@ class FriendsViewModel(
             when (val result = friendsRepository.updateFriend(id, friend)) {
                 is NetworkResult.Success -> {
                     _singleFriendUIState.update { it.copy(isLoading = false, friend = result.data) }
-                    getFriends()
+                    friend.userId?.let { getFriends(it) }
                 }
                 is NetworkResult.Error -> {
                     _singleFriendUIState.update { it.copy(isLoading = false, error = result.error) }
@@ -128,14 +125,14 @@ class FriendsViewModel(
         }
     }
 
-    /** Filtering: name contains */
+    /** Filtering: name contains within the already user-filtered list */
     fun filterByName(nameFragment: String) {
         if (nameFragment.isBlank()) {
             _friendsUIState.update { it.copy(friends = originalFriendList) }
         } else {
             _friendsUIState.update { ui ->
                 ui.copy(
-                    friends = ui.friends.filter { p ->
+                    friends = originalFriendList.filter { p ->
                         p.name.contains(nameFragment, ignoreCase = true)
                     }
                 )
@@ -167,4 +164,3 @@ class FriendsViewModel(
         }
     }
 }
-
