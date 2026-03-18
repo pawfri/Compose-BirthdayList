@@ -72,9 +72,7 @@ fun MainScreen(
                 register = { email, password -> authenticationViewModel.register(email, password) },
                 navigateToNextScreen = {
                     friendsViewModel.getFriends(currentUserEmail)
-                    navController.navigate(NavRoutes.Home.route) {
-                        popUpTo(NavRoutes.Login.route) { inclusive = true }
-                    }
+                    navController.navigate(NavRoutes.Home.route)
                 }
             )
         }
