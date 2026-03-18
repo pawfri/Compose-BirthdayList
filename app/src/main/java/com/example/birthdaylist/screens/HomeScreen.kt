@@ -31,7 +31,8 @@ fun HomeScreen(
     onLogout: () -> Unit,
     navigateToLogin: () -> Unit,
     sortByName: (Boolean) -> Unit = {},
-    sortByAge: (Boolean) -> Unit = {}
+    sortByAge: (Boolean) -> Unit = {},
+    sortByBirthday: (Boolean) -> Unit = {}
 ) {
     Scaffold(
         modifier = modifier,
@@ -56,7 +57,8 @@ fun HomeScreen(
             onEdit = onEdit,
             onDelete = onDelete,
             sortByName = sortByName,
-            sortByAge = sortByAge
+            sortByAge = sortByAge,
+            sortByBirthday = sortByBirthday
         )
     }
 }
@@ -69,10 +71,12 @@ fun HomeContent(
     onDelete: (Int) -> Unit,
     sortByName: (Boolean) -> Unit = {},
     sortByAge: (Boolean) -> Unit = {},
-    modifier: Modifier = Modifier
+    sortByBirthday: (Boolean) -> Unit = {},
+    modifier: Modifier = Modifier,
 ) {
     var sortNameAscending by remember { mutableStateOf(true) }
     var sortAgeAscending by remember { mutableStateOf(true) }
+    var sortBirthdayAscending by remember { mutableStateOf(true) }
 
     Column(modifier = modifier.padding(innerPadding)) {
         Column(
@@ -107,6 +111,19 @@ fun HomeContent(
                     Icon(
                         imageVector = if (sortAgeAscending) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowUp,
                         contentDescription = if (sortAgeAscending) "Sort Age Ascending" else "Sort Age Descending",
+                        modifier = Modifier.padding(start = 4.dp)
+                    )
+                }
+                OutlinedButton(
+                    modifier = Modifier.weight(1f),
+                    onClick = {
+                        sortByBirthday(sortBirthdayAscending)
+                        sortBirthdayAscending = !sortBirthdayAscending
+                    }) {
+                    Text(text = "Birthday")
+                    Icon(
+                        imageVector = if (sortBirthdayAscending) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowUp,
+                        contentDescription = if (sortBirthdayAscending) "Sort Age Ascending" else "Sort Age Descending",
                         modifier = Modifier.padding(start = 4.dp)
                     )
                 }
@@ -168,6 +185,7 @@ fun HomeScreenPreview() {
         onLogout = {},
         navigateToLogin = {},
         sortByName = {},
-        sortByAge = {}
+        sortByAge = {},
+        sortByBirthday = {}
     )
 }

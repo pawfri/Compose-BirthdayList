@@ -63,7 +63,8 @@ fun MainScreen(
                     navController.popBackStack(NavRoutes.Login.route, inclusive = false)
                 },
                 sortByName = { friendsViewModel.sortByName(it) },
-                sortByAge = { friendsViewModel.sortByAge(it) }
+                sortByAge = { friendsViewModel.sortByAge(it) },
+                sortByBirthday = { friendsViewModel.sortByBirthday(it) }
             )
         }
         composable(NavRoutes.Login.route) {

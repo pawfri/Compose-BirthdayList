@@ -160,4 +160,27 @@ class FriendsViewModel(
             )
         }
     }
+
+    fun sortByBirthday(ascending: Boolean) {
+        _friendsUIState.update { ui ->
+            ui.copy(
+                friends = if (ascending)
+                    ui.friends.sortedWith(
+                        compareBy(
+                            { it.birthYear },
+                            { it.birthMonth },
+                            { it.birthDayOfMonth }
+                        )
+                    )
+                else
+                    ui.friends.sortedWith(
+                        compareBy(
+                            { it.birthYear },
+                            { it.birthMonth },
+                            { it.birthDayOfMonth }
+                        )
+                    ).reversed()
+            )
+        }
+    }
 }
