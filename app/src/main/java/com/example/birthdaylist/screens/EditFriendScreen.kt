@@ -17,7 +17,8 @@ fun EditFriendScreen(
     friend: Friend?,
     onUpdate: (Friend) -> Unit,
     onNavigateBack: () -> Unit,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    navigateToLogin: () -> Unit
 ) {
     if (friend == null) {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -83,6 +84,7 @@ fun EditFriendScreenPreview() {
         friend = Friend(id = 1, name = "Anna", birthYear = 1998, birthMonth = 3, birthDayOfMonth = 12, age = 25),
         onUpdate = {},
         onNavigateBack = {},
-        onLogout = {}
+        onLogout = {},
+        navigateToLogin = {}
     )
 }

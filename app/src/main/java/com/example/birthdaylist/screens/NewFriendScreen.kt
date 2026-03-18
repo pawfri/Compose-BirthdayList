@@ -3,7 +3,6 @@ package com.example.birthdaylist.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.birthdaylist.components.FriendContent
 
@@ -12,7 +11,8 @@ import com.example.birthdaylist.components.FriendContent
 fun NewFriendScreen(
     onNavigateBack: () -> Unit,
     onAdd: (String, Long?) -> Unit,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    navigateToLogin: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -48,6 +48,7 @@ fun NewFriendScreenPreview() {
     NewFriendScreen(
         onNavigateBack = {},
         onAdd = { _, _ -> },
-        onLogout = {}
+        onLogout = {},
+        navigateToLogin = {}
     )
 }

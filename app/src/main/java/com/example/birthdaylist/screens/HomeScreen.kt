@@ -21,7 +21,8 @@ fun HomeScreen(
     onAdd: () -> Unit,
     onEdit: (Int) -> Unit,
     onDelete: (Int) -> Unit,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    navigateToLogin: () -> Unit
 ) {
     Scaffold(
         modifier = modifier,
@@ -113,6 +114,7 @@ fun HomeScreenPreview() {
         onAdd = {},
         onEdit = {},
         onDelete = {},
-        onLogout = {}
+        onLogout = {},
+        navigateToLogin = {}
     )
 }

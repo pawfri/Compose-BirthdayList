@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -15,8 +16,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.birthdaylist.screens.EditFriendScreen
 import com.example.birthdaylist.screens.HomeScreen
+import com.example.birthdaylist.screens.LoginScreen
 import com.example.birthdaylist.screens.NewFriendScreen
 import com.example.birthdaylist.ui.theme.BirthdayListTheme
+import com.example.birthdaylist.viewmodel.AuthenticationViewModel
 import com.example.birthdaylist.viewmodel.FriendsViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -37,8 +40,10 @@ fun MainScreen(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     val friendsViewModel: FriendsViewModel = koinViewModel()
     val friendsUIState by friendsViewModel.friendsUIState.collectAsStateWithLifecycle()
+    val authenticationViewModel: AuthenticationViewModel = viewModel()
 
-    NavHost(navController = navController, startDestination = NavRoutes.Home.route) {
+    NavHost(navController = navController, startDestination = NavRoutes.Login.route
+    ) {
         composable(NavRoutes.Home.route) {
             HomeScreen(
                 friends = friendsUIState.friends,
@@ -46,9 +51,21 @@ fun MainScreen(modifier: Modifier = Modifier) {
                 onAdd = { navController.navigate(NavRoutes.NewFriend.route) },
                 onEdit = { id: Int -> navController.navigate("${NavRoutes.EditFriend.route}/$id") },
                 onDelete = { id: Int -> friendsViewModel.deleteFriend(id) },
-                onLogout = {
-                    navController.navigate(NavRoutes.Login.route) {
-                        popUpTo(0)
+                onLogout = { authenticationViewModel.signOut() },
+                navigateToLogin = {
+                    navController.popBackStack(NavRoutes.Login.route, inclusive = false)
+                })
+        }
+        composable(NavRoutes.Login.route) {
+            LoginScreen(
+                navController = navController,
+                user = authenticationViewModel.user,
+                message = authenticationViewModel.message,
+                signIn = { email, password -> authenticationViewModel.signIn(email, password) },
+                register = { email, password -> authenticationViewModel.register(email, password) },
+                navigateToNextScreen = {
+                    navController.navigate(NavRoutes.Home.route) {
+                        popUpTo(NavRoutes.Login.route) { inclusive = true }
                     }
                 }
             )
@@ -67,12 +84,10 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     navController.popBackStack()
                 },
                 onNavigateBack = { navController.popBackStack() },
-                onLogout = {
-                    navController.navigate(NavRoutes.Login.route) {
-                        popUpTo(0)
-                    }
-                }
-            )
+                onLogout = { authenticationViewModel.signOut() },
+                navigateToLogin = {
+                    navController.popBackStack(NavRoutes.Login.route, inclusive = false)
+                })
         }
         composable(NavRoutes.NewFriend.route) {
             NewFriendScreen(
@@ -81,12 +96,11 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     friendsViewModel.addFriend(name, birthdayMillis)
                     navController.popBackStack()
                 },
-                onLogout = {
-                    navController.navigate(NavRoutes.Login.route) {
-                        popUpTo(0)
-                    }
-                }
-            )
+                onLogout = { authenticationViewModel.signOut() },
+                navigateToLogin = {
+                    navController.popBackStack(NavRoutes.Login.route, inclusive = false)
+                })
         }
     }
 }
+
