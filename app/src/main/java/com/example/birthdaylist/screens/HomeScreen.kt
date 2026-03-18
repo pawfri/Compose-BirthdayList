@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.birthdaylist.components.SimpleTopAppBar
 import com.example.birthdaylist.data.Friend
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -27,17 +28,12 @@ fun HomeScreen(
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBar(
-                title = { Text("Home") },
-                actions = {
-                    Button(onClick = onLogout) {
-                        Text("Logout")
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
-                ),
+            SimpleTopAppBar(
+                title = "Home",
+                onLogout = {
+                    onLogout()
+                    navigateToLogin()
+                }
             )
         },
         floatingActionButton = {

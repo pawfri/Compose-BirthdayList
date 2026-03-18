@@ -7,8 +7,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -36,13 +38,17 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen(modifier: Modifier = Modifier) {
-    val navController = rememberNavController()
+fun MainScreen(
+    modifier: Modifier = Modifier,
+    navController: NavHostController = rememberNavController(),
+    authenticationViewModel: AuthenticationViewModel = viewModel()
+) {
     val friendsViewModel: FriendsViewModel = koinViewModel()
     val friendsUIState by friendsViewModel.friendsUIState.collectAsStateWithLifecycle()
-    val authenticationViewModel: AuthenticationViewModel = viewModel()
 
-    NavHost(navController = navController, startDestination = NavRoutes.Login.route
+    NavHost(
+        navController = navController,
+        startDestination = NavRoutes.Login.route
     ) {
         composable(NavRoutes.Home.route) {
             HomeScreen(
@@ -64,9 +70,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
                 signIn = { email, password -> authenticationViewModel.signIn(email, password) },
                 register = { email, password -> authenticationViewModel.register(email, password) },
                 navigateToNextScreen = {
-                    navController.navigate(NavRoutes.Home.route) {
-                        popUpTo(NavRoutes.Login.route) { inclusive = true }
-                    }
+                    navController.navigate(NavRoutes.Home.route)
                 }
             )
         }
@@ -104,3 +108,10 @@ fun MainScreen(modifier: Modifier = Modifier) {
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+    BirthdayListTheme {
+        MainScreen()
+    }
+}

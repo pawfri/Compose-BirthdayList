@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.birthdaylist.components.FriendContent
+import com.example.birthdaylist.components.SimpleTopAppBar
 import com.example.birthdaylist.data.Friend
 import java.util.Calendar
 import java.util.TimeZone
@@ -39,17 +40,12 @@ fun EditFriendScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Edit Friend") },
-                actions = { 
-                    Button(onClick = onLogout) {
-                        Text("Logout")
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
-                ),
+            SimpleTopAppBar(
+                title = "Edit Friend",
+                onLogout = {
+                    onLogout()
+                    navigateToLogin()
+                }
             )
         },
     ) { innerPadding ->
