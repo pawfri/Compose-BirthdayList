@@ -33,10 +33,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.birthdaylist.NavRoutes
 import com.google.firebase.auth.FirebaseUser
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,7 +52,6 @@ fun LoginScreen(
     ) { innerPadding ->
         LoginContent(
             innerPadding = innerPadding,
-            navController = navController,
             user = user,
             message = message,
             signIn = signIn,
@@ -67,7 +64,6 @@ fun LoginScreen(
 @Composable
 fun LoginContent(
     innerPadding: PaddingValues,
-    navController: NavController,
     user: FirebaseUser? = null,
     message: String = "",
     signIn: (email: String, password: String) -> Unit = { _, _ -> },
