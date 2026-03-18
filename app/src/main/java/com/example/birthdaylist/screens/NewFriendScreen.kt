@@ -18,7 +18,7 @@ fun NewFriendScreen(
     Scaffold(
         topBar = {
             SimpleTopAppBar(
-                title = "Edit Friend",
+                title = "New Friend",
                 onLogout = {
                     onLogout()
                     navigateToLogin()
