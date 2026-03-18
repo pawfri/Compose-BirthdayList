@@ -5,6 +5,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.birthdaylist.components.FriendContent
+import com.example.birthdaylist.components.SimpleTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -16,17 +17,12 @@ fun NewFriendScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Add New Friend") },
-                actions = { 
-                    Button(onClick = onLogout) {
-                        Text("Logout")
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
-                ),
+            SimpleTopAppBar(
+                title = "Edit Friend",
+                onLogout = {
+                    onLogout()
+                    navigateToLogin()
+                }
             )
         },
     ) { innerPadding ->
