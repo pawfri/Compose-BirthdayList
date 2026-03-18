@@ -6,8 +6,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,6 +30,8 @@ fun HomeScreen(
     onDelete: (Int) -> Unit,
     onLogout: () -> Unit,
     navigateToLogin: () -> Unit,
+    sortByName: (Boolean) -> Unit = {},
+    sortByAge: (Boolean) -> Unit = {}
 ) {
     Scaffold(
         modifier = modifier,
@@ -46,7 +54,9 @@ fun HomeScreen(
             innerPadding = innerPadding,
             friends = friends,
             onEdit = onEdit,
-            onDelete = onDelete
+            onDelete = onDelete,
+            sortByName = sortByName,
+            sortByAge = sortByAge
         )
     }
 }
@@ -56,43 +66,88 @@ fun HomeContent(
     innerPadding: PaddingValues,
     friends: List<Friend>,
     onEdit: (Int) -> Unit,
-    onDelete: (Int) -> Unit
+    onDelete: (Int) -> Unit,
+    sortByName: (Boolean) -> Unit = {},
+    sortByAge: (Boolean) -> Unit = {},
+    modifier: Modifier = Modifier
 ) {
-    LazyColumn(
-        modifier = Modifier
-            .padding(innerPadding)
-            .fillMaxSize()
-    ) {
-        items(friends) { friend ->
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                onClick = { onEdit(friend.id) }
+    var sortNameAscending by remember { mutableStateOf(true) }
+    var sortAgeAscending by remember { mutableStateOf(true) }
+
+    Column(modifier = modifier.padding(innerPadding)) {
+        Column(
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth(),
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Column {
-                        Text(
-                            text = friend.name,
-                            style = MaterialTheme.typography.titleMedium
-                        )
+                OutlinedButton(
+                    modifier = Modifier.weight(1f),
+                    onClick = {
+                        sortByName(sortNameAscending)
+                        sortNameAscending = !sortNameAscending
+                    }) {
+                    Text(text = "Name")
+                    Icon(
+                        imageVector = if (sortNameAscending) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowUp,
+                        contentDescription = if (sortNameAscending) "Sort Name Ascending" else "Sort Name Descending",
+                        modifier = Modifier.padding(start = 4.dp)
+                    )
+                }
+                OutlinedButton(
+                    modifier = Modifier.weight(1f),
+                    onClick = {
+                        sortByAge(sortAgeAscending)
+                        sortAgeAscending = !sortAgeAscending
+                    }) {
+                    Text(text = "Age")
+                    Icon(
+                        imageVector = if (sortAgeAscending) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowUp,
+                        contentDescription = if (sortAgeAscending) "Sort Age Ascending" else "Sort Age Descending",
+                        modifier = Modifier.padding(start = 4.dp)
+                    )
+                }
+            }
 
-                        Row{
-                            Text(friend.age?.toString() ?: "-")
-                            Text(
-                                if (friend.age == 1) " year" else " years"
-                            )
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                items(friends) { friend ->
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        onClick = { onEdit(friend.id) }
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Column {
+                                Text(
+                                    text = friend.name,
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+
+                                Row {
+                                    Text(friend.age?.toString() ?: "-")
+                                    Text(
+                                        if (friend.age == 1) " year" else " years"
+                                    )
+                                }
+                                Text("${friend.birthDayOfMonth}/${friend.birthMonth}/${friend.birthYear}")
+                            }
+
+                            IconButton(onClick = { onDelete(friend.id) }) {
+                                Icon(Icons.Default.Delete, contentDescription = "Delete Friend")
+                            }
                         }
-                        Text("${friend.birthDayOfMonth}/${friend.birthMonth}/${friend.birthYear}")
-                    }
-
-                    IconButton(onClick = { onDelete(friend.id) }) {
-                        Icon(Icons.Default.Delete, contentDescription = "Delete Friend")
                     }
                 }
             }
@@ -111,6 +166,8 @@ fun HomeScreenPreview() {
         onEdit = {},
         onDelete = {},
         onLogout = {},
-        navigateToLogin = {}
+        navigateToLogin = {},
+        sortByName = {},
+        sortByAge = {}
     )
 }

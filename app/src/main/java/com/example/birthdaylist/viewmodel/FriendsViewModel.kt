@@ -125,7 +125,6 @@ class FriendsViewModel(
         }
     }
 
-    /** Filtering: name contains within the already user-filtered list */
     fun filterByName(nameFragment: String) {
         if (nameFragment.isBlank()) {
             _friendsUIState.update { it.copy(friends = originalFriendList) }
@@ -140,7 +139,6 @@ class FriendsViewModel(
         }
     }
 
-    /** Sorting: name */
     fun sortByName(ascending: Boolean) {
         _friendsUIState.update { ui ->
             ui.copy(
@@ -152,7 +150,6 @@ class FriendsViewModel(
         }
     }
 
-    /** Sorting: age */
     fun sortByAge(ascending: Boolean) {
         _friendsUIState.update { ui ->
             ui.copy(

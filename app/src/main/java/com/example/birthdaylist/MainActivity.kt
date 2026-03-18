@@ -61,7 +61,10 @@ fun MainScreen(
                 onLogout = { authenticationViewModel.signOut() },
                 navigateToLogin = {
                     navController.popBackStack(NavRoutes.Login.route, inclusive = false)
-                })
+                },
+                sortByName = { friendsViewModel.sortByName(it) },
+                sortByAge = { friendsViewModel.sortByAge(it) }
+            )
         }
         composable(NavRoutes.Login.route) {
             LoginScreen(
