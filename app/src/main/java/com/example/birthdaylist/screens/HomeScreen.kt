@@ -1,6 +1,8 @@
 package com.example.birthdaylist.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -77,93 +79,117 @@ fun HomeContent(
     var sortNameAscending by remember { mutableStateOf(true) }
     var sortAgeAscending by remember { mutableStateOf(true) }
     var sortBirthdayAscending by remember { mutableStateOf(true) }
+    var filtersExpanded by remember { mutableStateOf(false) }
+
 
     Column(modifier = modifier.padding(innerPadding)) {
-        Column(
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth(),
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                OutlinedButton(
-                    modifier = Modifier.weight(1f),
-                    onClick = {
-                        sortByName(sortNameAscending)
-                        sortNameAscending = !sortNameAscending
-                    }) {
-                    Text(text = "Name")
-                    Icon(
-                        imageVector = if (sortNameAscending) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowUp,
-                        contentDescription = if (sortNameAscending) "Sort Name Ascending" else "Sort Name Descending",
-                        modifier = Modifier.padding(start = 4.dp)
-                    )
-                }
-                OutlinedButton(
-                    modifier = Modifier.weight(1f),
-                    onClick = {
-                        sortByAge(sortAgeAscending)
-                        sortAgeAscending = !sortAgeAscending
-                    }) {
-                    Text(text = "Age")
-                    Icon(
-                        imageVector = if (sortAgeAscending) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowUp,
-                        contentDescription = if (sortAgeAscending) "Sort Age Ascending" else "Sort Age Descending",
-                        modifier = Modifier.padding(start = 4.dp)
-                    )
-                }
-                OutlinedButton(
-                    modifier = Modifier.weight(1f),
-                    onClick = {
-                        sortByBirthday(sortBirthdayAscending)
-                        sortBirthdayAscending = !sortBirthdayAscending
-                    }) {
-                    Text(text = "Birthday")
-                    Icon(
-                        imageVector = if (sortBirthdayAscending) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowUp,
-                        contentDescription = if (sortBirthdayAscending) "Sort Age Ascending" else "Sort Age Descending",
-                        modifier = Modifier.padding(start = 4.dp)
-                    )
-                }
-            }
 
-            LazyColumn(
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { filtersExpanded = !filtersExpanded }
+                .padding(8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "Filters",
+                style = MaterialTheme.typography.titleMedium
+            )
+            Icon(
+                imageVector = if (filtersExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                contentDescription = "Toggle filters"
+            )
+        }
+        if (filtersExpanded) {
+            Column(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp)
             ) {
-                items(friends) { friend ->
-                    Card(
+                Text("TODO") //TODO: Add filter name here
+                Text("TODO") //TODO: Add filter for age here, slider
+            }
+        }
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            OutlinedButton(
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    sortByName(sortNameAscending)
+                    sortNameAscending = !sortNameAscending
+                }) {
+                Text(text = "Name")
+                Icon(
+                    imageVector = if (sortNameAscending) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowUp,
+                    contentDescription = if (sortNameAscending) "Sort Name Ascending" else "Sort Name Descending",
+                    modifier = Modifier.padding(start = 4.dp)
+                )
+            }
+            OutlinedButton(
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    sortByAge(sortAgeAscending)
+                    sortAgeAscending = !sortAgeAscending
+                }) {
+                Text(text = "Age")
+                Icon(
+                    imageVector = if (sortAgeAscending) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowUp,
+                    contentDescription = if (sortAgeAscending) "Sort Age Ascending" else "Sort Age Descending",
+                    modifier = Modifier.padding(start = 4.dp)
+                )
+            }
+            OutlinedButton(
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    sortByBirthday(sortBirthdayAscending)
+                    sortBirthdayAscending = !sortBirthdayAscending
+                }) {
+                Text(text = "Birthday")
+                Icon(
+                    imageVector = if (sortBirthdayAscending) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowUp,
+                    contentDescription = if (sortBirthdayAscending) "Sort Age Ascending" else "Sort Age Descending",
+                    modifier = Modifier.padding(start = 4.dp)
+                )
+            }
+        }
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            items(friends) { friend ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    onClick = { onEdit(friend.id) }
+                ) {
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp),
-                        onClick = { onEdit(friend.id) }
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Column {
+                        Column {
+                            Text(
+                                text = friend.name,
+                                style = MaterialTheme.typography.titleMedium
+                            )
+
+                            Row {
+                                Text(friend.age?.toString() ?: "-")
                                 Text(
-                                    text = friend.name,
-                                    style = MaterialTheme.typography.titleMedium
+                                    if (friend.age == 1) " year" else " years"
                                 )
-
-                                Row {
-                                    Text(friend.age?.toString() ?: "-")
-                                    Text(
-                                        if (friend.age == 1) " year" else " years"
-                                    )
-                                }
-                                Text("${friend.birthDayOfMonth}/${friend.birthMonth}/${friend.birthYear}")
                             }
+                            Text("${friend.birthDayOfMonth}/${friend.birthMonth}/${friend.birthYear}")
+                        }
 
-                            IconButton(onClick = { onDelete(friend.id) }) {
-                                Icon(Icons.Default.Delete, contentDescription = "Delete Friend")
-                            }
+                        IconButton(onClick = { onDelete(friend.id) }) {
+                            Icon(Icons.Default.Delete, contentDescription = "Delete Friend")
                         }
                     }
                 }

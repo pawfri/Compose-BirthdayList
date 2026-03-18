@@ -125,6 +125,7 @@ class FriendsViewModel(
         }
     }
 
+    //TODO: implement filterByName on HomeScreen
     fun filterByName(nameFragment: String) {
         if (nameFragment.isBlank()) {
             _friendsUIState.update { it.copy(friends = originalFriendList) }
@@ -138,6 +139,9 @@ class FriendsViewModel(
             }
         }
     }
+
+    //TODO: implement filterByAge on HomeScreen
+    fun filterByAge(age: Int) {}
 
     fun sortByName(ascending: Boolean) {
         _friendsUIState.update { ui ->
