@@ -84,6 +84,7 @@ fun HomeScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeContent(
     innerPadding: PaddingValues,
@@ -133,7 +134,10 @@ fun HomeContent(
             ) {
                 OutlinedTextField(
                     value = nameFragment,
-                    onValueChange = { nameFragment = it },
+                    onValueChange = { 
+                        nameFragment = it
+                        onFilterByName(it)
+                    },
                     label = { Text("Filter by name") },
                     modifier = Modifier.fillMaxWidth(),
                     leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
