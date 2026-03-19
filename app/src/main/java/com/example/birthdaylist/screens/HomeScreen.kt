@@ -9,6 +9,8 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowDownward
+import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.ExpandLess
@@ -170,7 +172,7 @@ fun HomeContent(
                 }) {
                 Text(text = "Name")
                 Icon(
-                    imageVector = if (sortNameAscending) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowUp,
+                    imageVector = if (sortNameAscending) Icons.Default.ArrowDownward else Icons.Default.ArrowUpward,
                     contentDescription = if (sortNameAscending) "Sort Name Ascending" else "Sort Name Descending",
                     modifier = Modifier.padding(start = 4.dp)
                 )
@@ -183,7 +185,7 @@ fun HomeContent(
                 }) {
                 Text(text = "Age")
                 Icon(
-                    imageVector = if (sortAgeAscending) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowUp,
+                    imageVector = if (sortAgeAscending) Icons.Default.ArrowDownward else Icons.Default.ArrowUpward,
                     contentDescription = if (sortAgeAscending) "Sort Age Ascending" else "Sort Age Descending",
                     modifier = Modifier.padding(start = 4.dp)
                 )
@@ -196,7 +198,7 @@ fun HomeContent(
                 }) {
                 Text(text = "Birthday")
                 Icon(
-                    imageVector = if (sortBirthdayAscending) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowUp,
+                    imageVector = if (sortBirthdayAscending) Icons.Default.ArrowDownward else Icons.Default.ArrowUpward,
                     contentDescription = if (sortBirthdayAscending) "Sort Age Ascending" else "Sort Age Descending",
                     modifier = Modifier.padding(start = 4.dp)
                 )
