@@ -5,18 +5,33 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.filled.Filter
+import androidx.compose.material.icons.filled.Filter1
+import androidx.compose.material.icons.filled.Filter2
+import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.icons.filled.FilterNone
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.birthdaylist.components.SimpleTopAppBar
@@ -34,7 +49,8 @@ fun HomeScreen(
     navigateToLogin: () -> Unit,
     sortByName: (Boolean) -> Unit = {},
     sortByAge: (Boolean) -> Unit = {},
-    sortByBirthday: (Boolean) -> Unit = {}
+    sortByBirthday: (Boolean) -> Unit = {},
+    filterByName: (String) -> Unit = {}
 ) {
     Scaffold(
         modifier = modifier,
@@ -60,7 +76,8 @@ fun HomeScreen(
             onDelete = onDelete,
             sortByName = sortByName,
             sortByAge = sortByAge,
-            sortByBirthday = sortByBirthday
+            sortByBirthday = sortByBirthday,
+            onFilterByName = filterByName
         )
     }
 }
@@ -68,18 +85,21 @@ fun HomeScreen(
 @Composable
 fun HomeContent(
     innerPadding: PaddingValues,
+    modifier: Modifier = Modifier,
     friends: List<Friend>,
     onEdit: (Int) -> Unit,
     onDelete: (Int) -> Unit,
     sortByName: (Boolean) -> Unit = {},
     sortByAge: (Boolean) -> Unit = {},
     sortByBirthday: (Boolean) -> Unit = {},
-    modifier: Modifier = Modifier,
+    onFilterByName: (String) -> Unit = {},
 ) {
     var sortNameAscending by remember { mutableStateOf(true) }
     var sortAgeAscending by remember { mutableStateOf(true) }
     var sortBirthdayAscending by remember { mutableStateOf(true) }
     var filtersExpanded by remember { mutableStateOf(false) }
+    var nameFragment by remember { mutableStateOf("") }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
 
     Column(modifier = modifier.padding(innerPadding)) {
@@ -89,11 +109,14 @@ fun HomeContent(
                 .fillMaxWidth()
                 .clickable { filtersExpanded = !filtersExpanded }
                 .padding(8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Absolute.Right
         ) {
+            Icon(Icons.Default.Tune, contentDescription = "Filters")
+            Spacer(Modifier.width(4.dp))
             Text(
                 text = "Filters",
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleLarge
             )
             Icon(
                 imageVector = if (filtersExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
@@ -106,10 +129,34 @@ fun HomeContent(
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp)
             ) {
-                Text("TODO") //TODO: Add filter name here
-                Text("TODO") //TODO: Add filter for age here, slider
+                OutlinedTextField(
+                    value = nameFragment,
+                    onValueChange = { nameFragment = it },
+                    label = { Text("Filter by name") },
+                    modifier = Modifier.fillMaxWidth(),
+                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                    trailingIcon = {
+                        if (nameFragment.isNotEmpty()) {
+                            IconButton(onClick = {
+                                nameFragment = ""
+                                onFilterByName("") // Clear filter immediately
+                            }) {
+                                Icon(Icons.Default.Close, contentDescription = "Clear")
+                            }
+                        }
+                    },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                    keyboardActions = KeyboardActions(onSearch = {
+                        onFilterByName(nameFragment)
+                        keyboardController?.hide()
+                    })
+                )
             }
+            Text("TODO") //TODO: Add filter for age here, slider
         }
+
+        Spacer(modifier = Modifier.height(8.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -212,6 +259,7 @@ fun HomeScreenPreview() {
         navigateToLogin = {},
         sortByName = {},
         sortByAge = {},
-        sortByBirthday = {}
+        sortByBirthday = {},
+        filterByName = {}
     )
 }

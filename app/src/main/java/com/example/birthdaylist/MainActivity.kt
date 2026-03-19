@@ -64,7 +64,8 @@ fun MainScreen(
                 },
                 sortByName = { friendsViewModel.sortByName(it) },
                 sortByAge = { friendsViewModel.sortByAge(it) },
-                sortByBirthday = { friendsViewModel.sortByBirthday(it) }
+                sortByBirthday = { friendsViewModel.sortByBirthday(it) },
+                filterByName = { friendsViewModel.filterByName(it) }
             )
         }
         composable(NavRoutes.Login.route) {
