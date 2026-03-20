@@ -13,13 +13,6 @@ import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.ExpandLess
-import androidx.compose.material.icons.filled.ExpandMore
-import androidx.compose.material.icons.filled.Filter
-import androidx.compose.material.icons.filled.Filter1
-import androidx.compose.material.icons.filled.Filter2
-import androidx.compose.material.icons.filled.FilterList
-import androidx.compose.material.icons.filled.FilterNone
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Search
@@ -38,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.birthdaylist.components.SimpleTopAppBar
 import com.example.birthdaylist.data.Friend
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,7 +46,8 @@ fun HomeScreen(
     sortByName: (Boolean) -> Unit = {},
     sortByAge: (Boolean) -> Unit = {},
     sortByBirthday: (Boolean) -> Unit = {},
-    filterByName: (String) -> Unit = {}
+    filterByName: (String) -> Unit = {},
+    filterByAge: (Int, Int) -> Unit = { _, _ -> }
 ) {
     Scaffold(
         modifier = modifier,
@@ -79,7 +74,8 @@ fun HomeScreen(
             sortByName = sortByName,
             sortByAge = sortByAge,
             sortByBirthday = sortByBirthday,
-            onFilterByName = filterByName
+            onFilterByName = filterByName,
+            onFilterByAge = filterByAge
         )
     }
 }
@@ -96,12 +92,14 @@ fun HomeContent(
     sortByAge: (Boolean) -> Unit = {},
     sortByBirthday: (Boolean) -> Unit = {},
     onFilterByName: (String) -> Unit = {},
+    onFilterByAge: (Int, Int) -> Unit = { _, _ -> }
 ) {
     var sortNameAscending by remember { mutableStateOf(true) }
     var sortAgeAscending by remember { mutableStateOf(true) }
     var sortBirthdayAscending by remember { mutableStateOf(true) }
     var filtersExpanded by remember { mutableStateOf(false) }
     var nameFragment by remember { mutableStateOf("") }
+    var ageRange by remember { mutableStateOf(0f..120f) }
     val keyboardController = LocalSoftwareKeyboardController.current
 
 
@@ -158,8 +156,20 @@ fun HomeContent(
                         keyboardController?.hide()
                     })
                 )
+                
+                Spacer(modifier = Modifier.height(16.dp))
+                
+                Text(text = "Age range: ${ageRange.start.roundToInt()} - ${ageRange.endInclusive.roundToInt()}")
+                RangeSlider(
+                    value = ageRange,
+                    onValueChange = { range ->
+                        ageRange = range
+                        onFilterByAge(range.start.roundToInt(), range.endInclusive.roundToInt())
+                    },
+                    valueRange = 0f..120f,
+                    modifier = Modifier.padding(horizontal = 24.dp)
+                )
             }
-            Text("TODO") //TODO: Add filter for age here, slider
         }
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -262,10 +272,6 @@ fun HomeScreenPreview() {
         onEdit = {},
         onDelete = {},
         onLogout = {},
-        navigateToLogin = {},
-        sortByName = {},
-        sortByAge = {},
-        sortByBirthday = {},
-        filterByName = {}
+        navigateToLogin = {}
     )
 }

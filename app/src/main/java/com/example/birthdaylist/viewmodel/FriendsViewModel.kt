@@ -124,8 +124,7 @@ class FriendsViewModel(
             }
         }
     }
-
-    //TODO: implement filterByName on HomeScreen
+    
     fun filterByName(nameFragment: String) {
         if (nameFragment.isBlank()) {
             _friendsUIState.update { it.copy(friends = originalFriendList) }
@@ -140,8 +139,20 @@ class FriendsViewModel(
         }
     }
 
-    //TODO: implement filterByAge on HomeScreen
-    fun filterByAge(age: Int) {}
+    fun filterByAge(minAge: Int, maxAge: Int) {
+        _friendsUIState.update { ui ->
+            ui.copy(
+                friends = originalFriendList.filter { friend ->
+                    val age = friend.age
+                    if (age != null) {
+                        age in minAge..maxAge
+                    } else {
+                        minAge == 0 && maxAge == 120
+                    }
+                }
+            )
+        }
+    }
 
     fun sortByName(ascending: Boolean) {
         _friendsUIState.update { ui ->
