@@ -234,25 +234,35 @@ fun HomeContent(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(16.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Column {
+                        Column(
+                            modifier = Modifier.weight(1f)
+                        ) {
                             Text(
                                 text = friend.name,
                                 style = MaterialTheme.typography.titleMedium
                             )
-
                             Row {
                                 Text(friend.age?.toString() ?: "-")
                                 Text(
                                     if (friend.age == 1) " year" else " years"
                                 )
                             }
-                            Text("${friend.birthDayOfMonth}/${friend.birthMonth}/${friend.birthYear}")
                         }
 
+                        Text(
+                            text = "${friend.birthDayOfMonth}/${friend.birthMonth}/${friend.birthYear}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.padding(horizontal = 8.dp)
+                        )
+
                         IconButton(onClick = { onDelete(friend.id) }) {
-                            Icon(Icons.Default.Delete, contentDescription = "Delete Friend")
+                            Icon(
+                                Icons.Default.Delete,
+                                contentDescription = "Delete Friend",
+                                tint = MaterialTheme.colorScheme.error
+                            )
                         }
                     }
                 }
