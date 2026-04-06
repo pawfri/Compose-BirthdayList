@@ -28,6 +28,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -176,4 +177,18 @@ fun DatePickerDialog(
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun FriendContentPreview() {
+    FriendContent(
+        innerPadding = PaddingValues(0.dp),
+        title = "Add New Friend",
+        subtitle = "Enter friend information and click save",
+        initialName = "Patrick",
+        initialBirthday = 1735689600000L,
+        onCancel = {},
+        onSave = { _, _ -> }
+    )
 }

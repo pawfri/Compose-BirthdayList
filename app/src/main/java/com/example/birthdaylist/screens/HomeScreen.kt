@@ -104,7 +104,6 @@ fun HomeContent(
 
 
     Column(modifier = modifier.padding(innerPadding)) {
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
