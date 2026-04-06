@@ -40,7 +40,6 @@ import com.google.firebase.auth.FirebaseUser
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
-    navController: NavHostController,
     user: FirebaseUser? = null,
     message: String = "",
     signIn: (email: String, password: String) -> Unit = { _, _ -> },
@@ -160,7 +159,5 @@ fun LoginContent(
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {
-    LoginScreen(
-        navController = rememberNavController()
-    )
+    LoginScreen()
 }

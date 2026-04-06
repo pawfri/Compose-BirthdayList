@@ -71,7 +71,6 @@ fun MainScreen(
         }
         composable(NavRoutes.Login.route) {
             LoginScreen(
-                navController = navController,
                 user = authenticationViewModel.user,
                 message = authenticationViewModel.message,
                 signIn = { email, password -> authenticationViewModel.signIn(email, password) },
